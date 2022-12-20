@@ -76,7 +76,10 @@ func (h *Handler) Request(ctx context.Context, pb *paho.Publish) (resp *paho.Pub
 	}
 
 	pb.Properties.CorrelationData = []byte(cID)
-	pb.Properties.ResponseTopic = h.responseTopic
+	if p.Properties.ResponseTopic == "" {
+		pb.Properties.ResponseTopic = h.responseTopic
+
+	}
 	pb.Retain = false
 
 	_, err = h.cm.Publish(ctx, pb)
